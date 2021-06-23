@@ -25,12 +25,7 @@ fun BottomNavigationView.setupWithNavController(
     navGraphIds.forEachIndexed { index, navGraphId ->
         val isFirst = index == 0
         val fragmentTag = getFragmentTag(index)
-        val navHostFragment = obtainNavHostFragment(
-            fragmentManager,
-            fragmentTag,
-            navGraphId,
-            containerId
-        )
+        val navHostFragment = obtainNavHostFragment(fragmentManager, fragmentTag, navGraphId, containerId)
         val graphId = navHostFragment.navController.graph.id
         if (isFirst) firstFragmentGraphId = graphId
 
