@@ -1,4 +1,7 @@
-package com.simbirsoft.smoke.video
+package com.simbirsoft.smoke.ui.video
 
-class VideoFragment {
+import com.simbirsoft.smoke.R
+import com.simbirsoft.smoke.ui.BaseFragment
+
+class VideoFragment : BaseFragment(R.layout.fragment_video) {
 }

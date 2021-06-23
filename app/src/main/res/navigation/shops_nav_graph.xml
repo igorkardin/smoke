@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/shops_nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shops_nav_graph"
+    app:startDestination="@id/shops">
 
+    <fragment
+        android:id="@+id/shops"
+        android:name="com.simbirsoft.smoke.ui.shops.ShopsFragment">
+        <action
+            android:id="@+id/to_details"
+            app:destination="@id/todo" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/todo"
+        android:name="com.simbirsoft.smoke.ui.hookah.TodoFragment" />
 </navigation>

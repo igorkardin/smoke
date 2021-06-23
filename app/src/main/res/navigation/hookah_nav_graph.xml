@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/hookah_nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hookah_nav_graph"
+    app:startDestination="@id/hookah">
 
+    <fragment
+        android:id="@+id/hookah"
+        android:name="com.simbirsoft.smoke.ui.hookah.HookahFragment">
+        <action
+            android:id="@+id/to_details"
+            app:destination="@id/todo" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/todo"
+        android:name="com.simbirsoft.smoke.ui.hookah.TodoFragment" />
 </navigation>

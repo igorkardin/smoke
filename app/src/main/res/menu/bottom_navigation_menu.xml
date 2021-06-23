@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+        android:id="@+id/hookah_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/hookah" />
+    <item
+        android:id="@+id/shops_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/shops" />
+    <item
+        android:id="@+id/video_nav_graph"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/video" />
 </menu>
