@@ -1,0 +1,2 @@
+rootProject.name = "Smoke"
+include ':app'
