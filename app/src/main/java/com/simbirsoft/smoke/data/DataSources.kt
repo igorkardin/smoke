@@ -1,50 +1,34 @@
 package com.simbirsoft.smoke.data
 
-import androidx.paging.PagingSource
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.domain.HookahRating
 import com.simbirsoft.smoke.domain.Review
-import kotlinx.coroutines.GlobalScope
+import com.simbirsoft.smoke.domain.Shop
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-
-class HookahRepository {
-    private val source = HookahPagingSource(Firebase.firestore)
-    private val reviewTestSource = ReviewPagingSource(Firebase.firestore)
-
-    init {
-        GlobalScope.launch {
-            reviewTestSource.addReviewToHookah(
-                Hookah(
-                    "test_hookah", HookahRating(1, 5.0), "HookahName",
-                    "https://shutniki.club/wp-content/uploads/2020/04/smeshnye_kartinki_kalyan_6_27153457.jpg",
-                    10000
-                ),
-                review = Review(EMPTY_FIREBASE_ID, hookahId = 1, author = "Me", body = "Somebody", 4)
-            ).collect {}
-        }
-    }
-
-    fun getHookahs(): PagingSource<Query, Hookah> = source
-}
 
 private const val HOOKAH_COLLECTION = "hookah"
 private const val REVIEW_COLLECTION = "review"
+private const val SHOPS_COLLECTION = "shops"
 
 class HookahPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Hookah>() {
     override val mapper: (DocumentSnapshot) -> Hookah = { it.toHookah() }
     override val collectionReference: CollectionReference = Firebase.firestore.collection(HOOKAH_COLLECTION)
+
+    fun addHookah(hookah: Hookah): Flow<Unit> = flow {
+        store.runTransaction { transaction ->
+            val newDoc = collectionReference.document()
+            transaction.set(newDoc, hookah.copy(id = newDoc.id).toMap())
+            Unit
+        }.await().also {
+            emit(it ?: Unit)
+        }
+    }
 }
 
 class ReviewPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Review>() {
@@ -54,10 +38,11 @@ class ReviewPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Re
     private val hookahCollection: CollectionReference = store.collection(HOOKAH_COLLECTION)
     fun addReviewToHookah(hookah: Hookah, review: Review): Flow<Unit> = flow {
         val hookahReference = hookahCollection.getReferenceById(hookah.id)
+        val oldHookah = hookahReference.get().await()?.toHookah() ?: throw IllegalStateException()
         store.runTransaction { transaction ->
             val newDoc = collectionReference.document()
             transaction.set(newDoc, review.copy(id = newDoc.id).toMap())
-            val newHookah = hookah.updateRating(review)
+            val newHookah = oldHookah.updateRating(review)
             hookahReference.set(newHookah.toMap())
             Unit
         }.await().also {
@@ -66,12 +51,17 @@ class ReviewPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Re
     }
 }
 
-suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
-    addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            continuation.resumeWith(Result.success(task.result))
-        } else {
-            continuation.resumeWithException(task.exception ?: IllegalStateException("Missing exception"))
+class ShopPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Shop>() {
+    override val mapper: (DocumentSnapshot) -> Shop = { it.toShop() }
+    override val collectionReference: CollectionReference = store.collection(SHOPS_COLLECTION)
+
+    fun addShop(shop: Shop): Flow<Unit> = flow {
+        store.runTransaction { transaction ->
+            val newDoc = collectionReference.document()
+            transaction.set(newDoc, shop.copy(id = newDoc.id))
+            Unit
+        }.await().also {
+            emit(it ?: Unit)
         }
     }
 }
@@ -83,7 +73,7 @@ private suspend fun CollectionReference.getReferenceById(id: String) = whereEqua
     ?.documents?.firstOrNull()?.reference
     ?: kotlin.run { throw IllegalStateException("Hookah id not found") }
 
-private fun Hookah.updateRating(newReview: Review): Hookah {
+fun Hookah.updateRating(newReview: Review): Hookah {
     val newAvg = (rating.average * rating.count + newReview.rating) / (rating.count + 1)
     return copy(rating = HookahRating(rating.count + 1, newAvg))
 }
