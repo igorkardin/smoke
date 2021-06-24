@@ -8,4 +8,10 @@
     <string name="shops">Магазины</string>
     <string name="profile">Видео</string>
     <string name="video">Видео</string>
+
+    <string name="favorite">Избранные кальяны</string>
+    
+    <string name="price">%d ₽</string>
+    <string name="price_normal">%.2f ₽</string>
+    <string name="rating">%.2f</string>
 </resources>

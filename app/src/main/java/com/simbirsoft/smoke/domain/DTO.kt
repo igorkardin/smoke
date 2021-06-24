@@ -12,6 +12,7 @@ data class Hookah(
 ) : DTO
 
 data class HookahRating(val count: Long, val average: Double)
+
 data class Review(
     override val id: String = EMPTY_FIREBASE_ID,
     val hookahId: String,
