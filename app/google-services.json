@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "292166095386",
+    "project_id": "smoke-f9aa9",
+    "storage_bucket": "smoke-f9aa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292166095386:android:9bdcd9a5ce6359e55c77a3",
+        "android_client_info": {
+          "package_name": "com.simbirsoft.smoke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292166095386-2fch1opne70shl9e2tue5b4pu9uhovms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaXGPm0F3pkqOOj0upS8wW1FS2K5MOzIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292166095386-2fch1opne70shl9e2tue5b4pu9uhovms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
