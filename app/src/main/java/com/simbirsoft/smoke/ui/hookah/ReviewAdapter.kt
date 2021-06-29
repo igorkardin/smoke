@@ -30,6 +30,8 @@ class ReviewAdapter : PagingDataAdapter<Review, ReviewAdapter.ReviewViewHolder>(
         item ?: return
         holder.binding.apply {
             description.text = item.body
+            userName.text = item.author
+            rating.progress = item.rating.toInt()
         }
     }
 

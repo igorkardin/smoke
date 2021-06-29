@@ -45,7 +45,7 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
 private fun Hookah.applyToView(binding: FragmentHookahDetailBinding) {
     Glide.with(binding.root).load(picture).into(binding.hookahImage)
     binding.description.text = description
-    binding.hookahPrice.text = price.toString()
-    binding.rating.text = rating.average.toString()
+    binding.hookahPrice.text = binding.root.context.getString(R.string.price, price)
+    binding.rating.text = binding.root.context.getString(R.string.rating, rating.average)
     binding.toolbar.title = name
 }

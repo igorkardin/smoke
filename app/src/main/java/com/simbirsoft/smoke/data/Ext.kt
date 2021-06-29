@@ -35,11 +35,10 @@ fun Shop.toMap() = mapOf(
 )
 
 fun DocumentSnapshot.toShop(): Shop {
-    val geoPoint = getGeoPoint("location")!!
     return Shop(
         id = getString("id")!!,
-        longitude = geoPoint.longitude,
-        latitude = geoPoint.longitude,
+        longitude = getDouble("longitude")!!,
+        latitude = getDouble("latitude")!!,
         picture = getString("picture")!!,
         name = getString("name")!!
     )

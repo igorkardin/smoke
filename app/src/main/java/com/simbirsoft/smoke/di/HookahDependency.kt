@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.simbirsoft.smoke.data.repositories.HookahRepository
 import com.simbirsoft.smoke.presentation.HookahViewModel
 import com.simbirsoft.smoke.ui.hookah.HookahFragment
+import com.simbirsoft.smoke.ui.shops.ShopsFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
