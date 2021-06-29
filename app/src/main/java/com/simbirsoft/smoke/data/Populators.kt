@@ -36,20 +36,20 @@ fun addHookah() {
 
 fun addReviews() {
     val reviewRepository = ReviewRepository(Firebase.firestore)
-    addThreeReviewsToHookah("0OnIXptKWkYu78BfOeN4", reviewRepository)
+    addReviewsToHookah("0OnIXptKWkYu78BfOeN4", reviewRepository)
 }
 
 
-fun addThreeReviewsToHookah(hookahId: String, repository: ReviewRepository) {
-    fun getReview() = Review(
+fun addReviewsToHookah(hookahId: String, repository: ReviewRepository, count: Int = 5) {
+    fun getReview(index: Int) = Review(
         hookahId = hookahId,
         author = "Leonid",
-        body = "Нормальный кальян, всем советую, не лучший, но нормально",
-        rating = Random.nextLong(1, 5)
+        body = "Хороший отзыв #$index",
+        rating = Random.nextLong(4, 5)
     )
 
     CoroutineScope(Dispatchers.IO).launch {
-        for (i in 0 until 4) repository.add(getReview())
+        for (i in 0 until count) repository.add(getReview(i))
     }
 }
 

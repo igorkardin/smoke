@@ -34,15 +34,13 @@ fun Shop.toMap() = mapOf(
     "location" to GeoPoint(latitude, longitude)
 )
 
-fun DocumentSnapshot.toShop(): Shop {
-    return Shop(
-        id = getString("id")!!,
-        longitude = getDouble("longitude")!!,
-        latitude = getDouble("latitude")!!,
-        picture = getString("picture")!!,
-        name = getString("name")!!
-    )
-}
+fun DocumentSnapshot.toShop() = Shop(
+    id = getString("id")!!,
+    longitude = getDouble("longitude")!!,
+    latitude = getDouble("latitude")!!,
+    picture = getString("picture")!!,
+    name = getString("name")!!
+)
 
 fun Review.toMap() = mapOf(
     "id" to id,
