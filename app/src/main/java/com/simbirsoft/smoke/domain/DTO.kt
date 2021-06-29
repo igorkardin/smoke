@@ -1,6 +1,6 @@
 package com.simbirsoft.smoke.domain
 
-import com.simbirsoft.smoke.data.EMPTY_FIREBASE_ID
+import com.simbirsoft.smoke.data.sources.EMPTY_FIREBASE_ID
 
 data class Hookah(
     override val id: String = EMPTY_FIREBASE_ID,
@@ -29,8 +29,17 @@ data class Shop(
     val latitude: Double
 ) : DTO
 
+data class Discount(
+    override val id: String,
+    val shopId: String,
+    val name: String,
+    val description: String
+) : DTO
+
 interface DTO {
     val id: String
 }
 
 const val PAGE_SIZE = 7L
+
+interface DataSourceParams

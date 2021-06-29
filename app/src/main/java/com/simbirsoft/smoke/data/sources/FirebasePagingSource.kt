@@ -1,10 +1,11 @@
-package com.simbirsoft.smoke.data
+package com.simbirsoft.smoke.data.sources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import com.simbirsoft.smoke.data.await
 import com.simbirsoft.smoke.domain.PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,13 +13,20 @@ import java.io.IOException
 
 const val EMPTY_FIREBASE_ID = "mt"
 
+abstract class ChildPagingSource<T : Any>(private val selectId: String?) : FirebasePagingSource<T>() {
+    override fun Query.applySelectOptions() = apply {
+        selectId?.let { whereEqualTo("id", it) }
+    }
+}
+
 abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
     protected abstract val mapper: ((DocumentSnapshot) -> T)
     protected abstract val collectionReference: CollectionReference
 
-    override suspend fun load(params: LoadParams<Query>): LoadResult<Query, T> = withContext(Dispatchers.IO) {
-        val currentPage = params.key ?: collectionReference.pageAfter()
+    protected open fun Query.applySelectOptions(): Query = this
 
+    final override suspend fun load(params: LoadParams<Query>): LoadResult<Query, T> = withContext(Dispatchers.IO) {
+        val currentPage = params.key ?: collectionReference.pageAfter()
         val currentPageQuerySnapshot = currentPage.get().await()
         val lastSnapshot = if (currentPageQuerySnapshot?.isEmpty == false) {
             currentPageQuerySnapshot.documents.last()
@@ -41,10 +49,9 @@ abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
 
     override fun getRefreshKey(state: PagingState<Query, T>): Query? = null
 
-    private fun CollectionReference.pageAfter(
-        lastSnap: DocumentSnapshot? = null, pageSize: Long = PAGE_SIZE
-    ) = orderBy("id")
-        .startAfter(lastSnap?.id)
-        .limit(pageSize)
-
+    private fun CollectionReference.pageAfter(lastSnap: DocumentSnapshot? = null, pageSize: Long = PAGE_SIZE) =
+        orderBy("id")
+            .applySelectOptions()
+            .startAfter(lastSnap?.id)
+            .limit(pageSize)
 }
