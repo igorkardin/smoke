@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.simbirsoft.smoke.databinding.ItemShopBinding
 import com.simbirsoft.smoke.domain.Shop
 
@@ -45,6 +46,9 @@ class ShopsAdapter : PagingDataAdapter<Shop, ShopsAdapter.ShopsViewHolder>(diffC
         item ?: return
         holder.binding.apply {
             shopName.text = item.name
+            Glide.with(holder.itemView)
+                .load(item.picture)
+                .into(holder.binding.shopImage)
         }
     }
 
