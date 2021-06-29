@@ -28,6 +28,7 @@ class ReviewPagingSource(
     val store: FirebaseFirestore,
     selectId: String? = null
 ) : ChildPagingSource<Review>(selectId) {
+    override val parentField: String = "hookah"
     override val collectionReference: CollectionReference = store.collection(REVIEW_COLLECTION)
     override val mapper: (DocumentSnapshot) -> Review = { it.toReview() }
 }
@@ -36,6 +37,7 @@ class DiscountPagingSource(
     val store: FirebaseFirestore,
     selectId: String? = null,
 ) : ChildPagingSource<Discount>(selectId) {
+    override val parentField: String = "shop"
     override val mapper: (DocumentSnapshot) -> Discount = { it.toDiscount() }
     override val collectionReference: CollectionReference = store.collection(DISCOUNT_COLLECTION)
 

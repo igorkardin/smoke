@@ -14,9 +14,8 @@ import java.io.IOException
 const val EMPTY_FIREBASE_ID = "mt"
 
 abstract class ChildPagingSource<T : Any>(private val selectId: String?) : FirebasePagingSource<T>() {
-    override fun Query.applySelectOptions() = apply {
-        selectId?.let { whereEqualTo("id", it) }
-    }
+    abstract val parentField: String
+    override fun Query.applySelectOptions() = selectId?.let { whereEqualTo(parentField, it) } ?: this
 }
 
 abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
@@ -50,8 +49,8 @@ abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
     override fun getRefreshKey(state: PagingState<Query, T>): Query? = null
 
     private fun CollectionReference.pageAfter(lastSnap: DocumentSnapshot? = null, pageSize: Long = PAGE_SIZE) =
-        orderBy("id")
-            .applySelectOptions()
+        applySelectOptions()
+            .orderBy("id")
             .startAfter(lastSnap?.id)
             .limit(pageSize)
 }

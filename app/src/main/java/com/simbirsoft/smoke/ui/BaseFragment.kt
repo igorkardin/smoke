@@ -17,9 +17,7 @@ open class BaseFragment(@LayoutRes id: Int) : Fragment(id) {
         inject(context.applicationContext as App)
     }
 
-    protected open fun inject(app: App) {
-        /* no-op */
-    }
+    protected open fun inject(app: App) = Unit
 
     override fun onResume() {
         super.onResume()
