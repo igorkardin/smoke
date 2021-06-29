@@ -1,6 +1,7 @@
 package com.simbirsoft.smoke.domain
 
 import com.simbirsoft.smoke.data.sources.EMPTY_FIREBASE_ID
+import java.io.Serializable
 
 data class Hookah(
     override val id: String = EMPTY_FIREBASE_ID,
@@ -9,7 +10,7 @@ data class Hookah(
     val picture: String,
     val price: Int,
     val description: String
-) : DTO
+) : DTO, Serializable
 
 data class HookahRating(val count: Long, val average: Double)
 
@@ -19,7 +20,7 @@ data class Review(
     val author: String,
     val body: String,
     val rating: Long
-) : DTO
+) : DTO, Serializable
 
 data class Shop(
     override val id: String = EMPTY_FIREBASE_ID,
@@ -27,14 +28,14 @@ data class Shop(
     val name: String,
     val longitude: Double,
     val latitude: Double
-) : DTO
+) : DTO, Serializable
 
 data class Discount(
     override val id: String,
     val shopId: String,
     val name: String,
     val description: String
-) : DTO
+) : DTO, Serializable
 
 interface DTO {
     val id: String

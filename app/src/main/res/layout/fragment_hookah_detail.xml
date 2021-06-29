@@ -17,8 +17,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|snap"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|snap">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/hookah_image"
