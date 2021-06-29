@@ -1,12 +1,10 @@
 package com.simbirsoft.smoke.data
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
-import com.simbirsoft.smoke.domain.Hookah
-import com.simbirsoft.smoke.domain.HookahRating
-import com.simbirsoft.smoke.domain.Review
-import com.simbirsoft.smoke.domain.Shop
+import com.simbirsoft.smoke.domain.*
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
@@ -27,14 +25,6 @@ fun Hookah.toMap() = mapOf(
     "review_count" to rating.count,
     "review_avg" to rating.average,
     "description" to description
-)
-
-fun DocumentSnapshot.toReview() = Review(
-    id = getString("id")!!,
-    hookahId = getString("hookah")!!,
-    author = getString("author")!!,
-    body = getString("body")!!,
-    rating = getLong("rating")!!
 )
 
 fun Shop.toMap() = mapOf(
@@ -63,6 +53,28 @@ fun Review.toMap() = mapOf(
     "rating" to rating
 )
 
+fun DocumentSnapshot.toReview() = Review(
+    id = getString("id")!!,
+    hookahId = getString("hookah")!!,
+    author = getString("author")!!,
+    body = getString("body")!!,
+    rating = getLong("rating")!!
+)
+
+fun Discount.toMap() = mapOf(
+    "id" to id,
+    "name" to name,
+    "description" to description,
+    "shop" to shopId,
+)
+
+fun DocumentSnapshot.toDiscount() = Discount(
+    id = getString("id")!!,
+    shopId = getString("shop")!!,
+    name = getString("name")!!,
+    description = getString("description")!!
+)
+
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
     addOnCompleteListener { task ->
         if (task.isSuccessful) {
@@ -72,3 +84,10 @@ suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
         }
     }
 }
+
+suspend fun CollectionReference.getReferenceById(id: String) = whereEqualTo("id", id)
+    .limit(1)
+    .get()
+    .await()
+    ?.documents?.firstOrNull()?.reference
+    ?: run { throw IllegalStateException("Hookah id not found") }

@@ -7,29 +7,27 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.simbirsoft.smoke.data.HookahPagingSource
+import com.simbirsoft.smoke.data.repositories.HookahRepository
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.domain.PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 
-class HookahViewModel(private val hookahSource: HookahPagingSource) : ViewModel() {
+class HookahViewModel(private val repository: HookahRepository) : ViewModel() {
     val hookahs: Flow<PagingData<Hookah>> = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE.toInt(), enablePlaceholders = true, maxSize = 100,
-        )
-    ) { hookahSource }
+        config = PagingConfig(pageSize = PAGE_SIZE.toInt(), enablePlaceholders = true, maxSize = 100)
+    ) { repository.provideDataSource() }
         .flow
         .flowOn(Dispatchers.IO)
         .cachedIn(viewModelScope)
 
-    class Factory(private val hookahSource: HookahPagingSource) : ViewModelProvider.Factory {
+    class Factory(private val repository: HookahRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HookahViewModel::class.java)) {
-                return HookahViewModel(hookahSource) as T
-            } else throw IllegalStateException("Bad Viewmodel")
+                return HookahViewModel(repository) as T
+            } else throw IllegalStateException("Bad ViewModel")
         }
     }
 }

@@ -31,7 +31,7 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun prefs(context: Context) = context.getSharedPreferences("hookah", Context.MODE_PRIVATE)
+    fun prefs(context: Context): SharedPreferences = context.getSharedPreferences("hookah", Context.MODE_PRIVATE)
 }
 
 @Retention(AnnotationRetention.RUNTIME)
