@@ -6,8 +6,7 @@ import android.net.Uri
 
 fun Context.openMap(latitude: Double, longitude: Double) {
     val uri = "geo:$latitude, $longitude"
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-    this.startActivity(intent)
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 }
 
 fun Context.openVideo(url: String = "ы") = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
