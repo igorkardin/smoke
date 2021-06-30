@@ -25,6 +25,9 @@
         <argument
             android:name="hookah"
             app:argType="com.simbirsoft.smoke.domain.Hookah" />
+        <action
+            android:id="@+id/to_hookah_review"
+            app:destination="@id/hookah_review" />
     </fragment>
 
     <fragment
@@ -34,4 +37,12 @@
             android:name="shop"
             app:argType="com.simbirsoft.smoke.domain.Shop" />
     </fragment>
+    <dialog
+        android:id="@+id/hookah_review"
+        android:name="com.simbirsoft.smoke.ui.hookah.HookahReviewFragment"
+        android:label="HookahReviewFragment">
+        <argument
+            android:name="hookah"
+            app:argType="com.simbirsoft.smoke.domain.Hookah" />
+    </dialog>
 </navigation>

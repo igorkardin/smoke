@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.simbirsoft.smoke.data.repositories.ReviewRepository
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.hookah.HookahDetailsFragment
+import com.simbirsoft.smoke.ui.hookah.HookahReviewFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,7 @@ import dagger.Provides
 @LowerScope
 interface ReviewComponent {
     fun inject(hookahDetails: HookahDetailsFragment)
+    fun inject(review: HookahReviewFragment)
 }
 
 @Module
