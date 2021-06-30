@@ -1,4 +1,4 @@
-package com.simbirsoft.smoke.ui.video
+package com.simbirsoft.smoke.ui
 
 import android.content.Context
 import androidx.navigation.findNavController

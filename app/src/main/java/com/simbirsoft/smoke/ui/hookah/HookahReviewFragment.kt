@@ -11,7 +11,7 @@ import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.databinding.FragmentRatingBinding
 import com.simbirsoft.smoke.domain.Review
 import com.simbirsoft.smoke.presentation.ReviewViewModel
-import com.simbirsoft.smoke.ui.video.BaseSheetFragment
+import com.simbirsoft.smoke.ui.BaseSheetFragment
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

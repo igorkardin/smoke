@@ -9,4 +9,4 @@ fun Context.openMap(latitude: Double, longitude: Double) {
     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
 }
 
-fun Context.openVideo(url: String = "ы") = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+fun Context.openVideo(url: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://$url")))

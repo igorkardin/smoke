@@ -77,6 +77,7 @@ fun Video.toMap() = mapOf(
     "title" to title,
     "url" to url,
     "length" to length,
+    "preview" to preview
 )
 
 fun DocumentSnapshot.toVideo() = Video(
@@ -84,6 +85,7 @@ fun DocumentSnapshot.toVideo() = Video(
     title = getString("title")!!,
     url = getString("url")!!,
     length = getString("length")!!,
+    preview = getString("preview")!!
 )
 
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->

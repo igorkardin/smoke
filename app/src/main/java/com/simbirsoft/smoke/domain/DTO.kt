@@ -42,6 +42,7 @@ data class Video(
     val length: String,
     val title: String,
     val url: String,
+    val preview: String
 ) : DTO, Serializable
 
 interface DTO {
