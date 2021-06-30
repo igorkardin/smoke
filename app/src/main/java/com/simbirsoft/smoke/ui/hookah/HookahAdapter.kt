@@ -13,13 +13,6 @@ import com.simbirsoft.smoke.domain.Hookah
 class HookahAdapter : PagingDataAdapter<Hookah, HookahAdapter.HookahViewHolder>(diffCallback) {
     private var clickListener: ((Hookah) -> Unit)? = null
 
-    companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<Hookah>() {
-            override fun areItemsTheSame(oldItem: Hookah, newItem: Hookah) = areContentsTheSame(oldItem, newItem)
-            override fun areContentsTheSame(oldItem: Hookah, newItem: Hookah) = oldItem == newItem
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HookahViewHolder {
         return HookahViewHolder(ItemHookahBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             .apply {
@@ -49,4 +42,11 @@ class HookahAdapter : PagingDataAdapter<Hookah, HookahAdapter.HookahViewHolder>(
     }
 
     class HookahViewHolder(val binding: ItemHookahBinding) : RecyclerView.ViewHolder(binding.root)
+
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<Hookah>() {
+            override fun areItemsTheSame(oldItem: Hookah, newItem: Hookah) = areContentsTheSame(oldItem, newItem)
+            override fun areContentsTheSame(oldItem: Hookah, newItem: Hookah) = oldItem == newItem
+        }
+    }
 }

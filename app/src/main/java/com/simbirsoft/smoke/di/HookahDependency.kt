@@ -1,9 +1,10 @@
 package com.simbirsoft.smoke.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.simbirsoft.smoke.data.HookahPagingSource
+import com.simbirsoft.smoke.data.repositories.HookahRepository
 import com.simbirsoft.smoke.presentation.HookahViewModel
 import com.simbirsoft.smoke.ui.hookah.HookahFragment
+import com.simbirsoft.smoke.ui.shops.ShopsFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -18,9 +19,9 @@ interface HookahComponent {
 class HookahModule {
     @Provides
     @LowerScope
-    fun hookahSource(firestore: FirebaseFirestore) = HookahPagingSource(firestore)
+    fun hookahRepository(store: FirebaseFirestore) = HookahRepository(store)
 
     @Provides
     @LowerScope
-    fun hookahViewModelFactory(hookahPagingSource: HookahPagingSource) = HookahViewModel.Factory(hookahPagingSource)
+    fun hookahViewModelFactory(hookahRepository: HookahRepository) = HookahViewModel.Factory(hookahRepository)
 }

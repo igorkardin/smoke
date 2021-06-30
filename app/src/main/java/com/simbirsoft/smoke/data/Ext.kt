@@ -1,12 +1,10 @@
 package com.simbirsoft.smoke.data
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
-import com.simbirsoft.smoke.domain.Hookah
-import com.simbirsoft.smoke.domain.HookahRating
-import com.simbirsoft.smoke.domain.Review
-import com.simbirsoft.smoke.domain.Shop
+import com.simbirsoft.smoke.domain.*
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
@@ -29,6 +27,29 @@ fun Hookah.toMap() = mapOf(
     "description" to description
 )
 
+fun Shop.toMap() = mapOf(
+    "id" to id,
+    "picture" to picture,
+    "name" to name,
+    "location" to GeoPoint(latitude, longitude)
+)
+
+fun DocumentSnapshot.toShop() = Shop(
+    id = getString("id")!!,
+    longitude = getDouble("longitude")!!,
+    latitude = getDouble("latitude")!!,
+    picture = getString("picture")!!,
+    name = getString("name")!!
+)
+
+fun Review.toMap() = mapOf(
+    "id" to id,
+    "hookah" to hookahId,
+    "author" to author,
+    "body" to body,
+    "rating" to rating
+)
+
 fun DocumentSnapshot.toReview() = Review(
     id = getString("id")!!,
     hookahId = getString("hookah")!!,
@@ -37,30 +58,18 @@ fun DocumentSnapshot.toReview() = Review(
     rating = getLong("rating")!!
 )
 
-fun Shop.toMap() = mapOf(
+fun Discount.toMap() = mapOf(
     "id" to id,
-    "picture" to picture,
     "name" to name,
-    "location" to GeoPoint(latitude, longitude)
+    "description" to description,
+    "shop" to shopId,
 )
 
-fun DocumentSnapshot.toShop(): Shop {
-    val geoPoint = getGeoPoint("location")!!
-    return Shop(
-        id = getString("id")!!,
-        longitude = geoPoint.longitude,
-        latitude = geoPoint.longitude,
-        picture = getString("picture")!!,
-        name = getString("name")!!
-    )
-}
-
-fun Review.toMap() = mapOf(
-    "id" to id,
-    "hookah" to hookahId,
-    "author" to author,
-    "body" to body,
-    "rating" to rating
+fun DocumentSnapshot.toDiscount() = Discount(
+    id = getString("id")!!,
+    shopId = getString("shop")!!,
+    name = getString("name")!!,
+    description = getString("description")!!
 )
 
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
@@ -72,3 +81,10 @@ suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
         }
     }
 }
+
+suspend fun CollectionReference.getReferenceById(id: String) = whereEqualTo("id", id)
+    .limit(1)
+    .get()
+    .await()
+    ?.documents?.firstOrNull()?.reference
+    ?: run { throw IllegalStateException("Hookah id not found") }

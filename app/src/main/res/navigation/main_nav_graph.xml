@@ -5,5 +5,44 @@
     app:startDestination="@id/bottom_nav_fragment">
     <fragment
         android:id="@+id/bottom_nav_fragment"
-        android:name="com.simbirsoft.smoke.ui.main.BottomNavFragment" />
+        android:name="com.simbirsoft.smoke.ui.main.BottomNavFragment">
+        <action
+            android:id="@+id/to_hookah_details"
+            app:destination="@id/hookah_details"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/to_shop_details"
+            app:destination="@id/shop_details"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/hookah_details"
+        android:name="com.simbirsoft.smoke.ui.hookah.HookahDetailsFragment">
+        <argument
+            android:name="hookah"
+            app:argType="com.simbirsoft.smoke.domain.Hookah" />
+        <action
+            android:id="@+id/to_hookah_review"
+            app:destination="@id/hookah_review" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shop_details"
+        android:name="com.simbirsoft.smoke.ui.shops.ShopDetailsFragment">
+        <argument
+            android:name="shop"
+            app:argType="com.simbirsoft.smoke.domain.Shop" />
+    </fragment>
+    <dialog
+        android:id="@+id/hookah_review"
+        android:name="com.simbirsoft.smoke.ui.hookah.HookahReviewFragment"
+        android:label="HookahReviewFragment">
+        <argument
+            android:name="hookah"
+            app:argType="com.simbirsoft.smoke.domain.Hookah" />
+    </dialog>
 </navigation>

@@ -2,22 +2,28 @@ package com.simbirsoft.smoke.ui.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.databinding.FragmentMainBinding
+import com.simbirsoft.smoke.presentation.BottomNavViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
 import com.simbirsoft.smoke.ui.setupWithNavController
 
 class BottomNavFragment : BaseFragment(R.layout.fragment_main) {
     private val binding by viewBinding<FragmentMainBinding>()
+    private val viewModel by viewModels<BottomNavViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val currentNavController = setupBottomNavigationBar()
+        binding.bottomNavigationView.selectedItemId = viewModel.selectedItemId
         currentNavController.observe(viewLifecycleOwner) { controller ->
             controller ?: return@observe
+            println("${viewModel.selectedItemId} ${controller.graph.id}")
+            viewModel.selectedItemId = controller.graph.id
             updateToolbarTitle(controller)
         }
     }
@@ -39,5 +45,4 @@ class BottomNavFragment : BaseFragment(R.layout.fragment_main) {
             fragmentManager = childFragmentManager,
             containerId = R.id.bottom_container,
         )
-
 }

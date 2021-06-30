@@ -1,16 +1,15 @@
-package com.simbirsoft.smoke.ui
+package com.simbirsoft.smoke.ui.video
 
 import android.content.Context
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.data.BackPressed
 
-abstract class BaseFragment(@LayoutRes id: Int) : Fragment(id), BackPressed {
+abstract class BaseSheetFragment : BottomSheetDialogFragment(), BackPressed {
     val mainNavController get() = (requireActivity() as MainActivity).findNavController(R.id.main_container)
 
     override fun onAttach(context: Context) {
