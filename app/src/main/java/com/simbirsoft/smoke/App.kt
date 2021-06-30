@@ -9,15 +9,15 @@ class App : Application() {
     var reviewComponent: ReviewComponent? = null
     var shopComponent: ShopComponent? = null
     var discountComponent: DiscountComponent? = null
+    var videoComponent: VideoComponent? = null
 
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        hookahComponent =
-            DaggerHookahComponent.builder()
-                .appComponent(appComponent)
-                .hookahModule(HookahModule())
-                .build()
+        hookahComponent = DaggerHookahComponent.builder()
+            .appComponent(appComponent)
+            .hookahModule(HookahModule())
+            .build()
         reviewComponent = DaggerReviewComponent.builder()
             .appComponent(appComponent)
             .reviewModule(ReviewModule())
@@ -29,6 +29,10 @@ class App : Application() {
         discountComponent = DaggerDiscountComponent.builder()
             .appComponent(appComponent)
             .discountModule(DiscountModule())
+            .build()
+        videoComponent = DaggerVideoComponent.builder()
+            .appComponent(appComponent)
+            .videoModule(VideoModule())
             .build()
     }
 }

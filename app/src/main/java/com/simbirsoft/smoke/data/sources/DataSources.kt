@@ -3,16 +3,14 @@ package com.simbirsoft.smoke.data.sources
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.simbirsoft.smoke.data.toDiscount
-import com.simbirsoft.smoke.data.toHookah
-import com.simbirsoft.smoke.data.toReview
-import com.simbirsoft.smoke.data.toShop
+import com.simbirsoft.smoke.data.*
 import com.simbirsoft.smoke.domain.*
 
 const val HOOKAH_COLLECTION = "hookah"
 const val REVIEW_COLLECTION = "review"
 const val SHOPS_COLLECTION = "shops"
 const val DISCOUNT_COLLECTION = "discounts"
+const val VIDEO_COLLECTION = "videos"
 
 class HookahPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Hookah>() {
     override val mapper: (DocumentSnapshot) -> Hookah = { it.toHookah() }
@@ -22,6 +20,11 @@ class HookahPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Ho
 class ShopPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Shop>() {
     override val mapper: (DocumentSnapshot) -> Shop = { it.toShop() }
     override val collectionReference: CollectionReference = store.collection(SHOPS_COLLECTION)
+}
+
+class VideoPagingSource(val store: FirebaseFirestore) : FirebasePagingSource<Video>() {
+    override val mapper: (DocumentSnapshot) -> Video = { it.toVideo() }
+    override val collectionReference: CollectionReference = store.collection(VIDEO_COLLECTION)
 }
 
 class ReviewPagingSource(

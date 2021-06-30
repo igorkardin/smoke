@@ -72,6 +72,20 @@ fun DocumentSnapshot.toDiscount() = Discount(
     description = getString("description")!!
 )
 
+fun Video.toMap() = mapOf(
+    "id" to id,
+    "title" to title,
+    "url" to url,
+    "length" to length,
+)
+
+fun DocumentSnapshot.toVideo() = Video(
+    id = getString("id")!!,
+    title = getString("title")!!,
+    url = getString("url")!!,
+    length = getString("length")!!,
+)
+
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
     addOnCompleteListener { task ->
         if (task.isSuccessful) {

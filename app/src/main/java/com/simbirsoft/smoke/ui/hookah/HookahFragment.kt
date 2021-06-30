@@ -31,7 +31,9 @@ class HookahFragment : BaseFragment(R.layout.fragment_hookah) {
         }
         binding.recycler.adapter = adapter
         lifecycleScope.launchWhenStarted {
-            viewModel.hookahs.collectLatest { adapter.submitData(it) }
+            viewModel.hookahs.collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 }
