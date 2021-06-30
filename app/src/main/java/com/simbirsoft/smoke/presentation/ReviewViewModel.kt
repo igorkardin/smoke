@@ -32,6 +32,10 @@ class ReviewViewModel(private val repository: ReviewRepository) : ViewModel() {
             .also { reviews = it }
     }
 
+    suspend fun addReview(review: Review) {
+        repository.add(review)
+    }
+
     class Factory(private val repository: ReviewRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

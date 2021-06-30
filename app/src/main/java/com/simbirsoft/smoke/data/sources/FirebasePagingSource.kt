@@ -41,7 +41,7 @@ abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
                 prevKey = null,
                 nextKey = lastSnapshot?.let { nextPage },
             )
-        } catch (e: IOException) {
+        } catch (e: Throwable) {
             LoadResult.Error(e)
         }
     }
