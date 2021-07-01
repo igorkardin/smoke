@@ -1,7 +1,6 @@
 package com.simbirsoft.smoke.ui.hookah
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -9,12 +8,12 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.simbirsoft.smoke.App
+import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.databinding.FragmentHookahDetailBinding
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
-import com.simbirsoft.smoke.ui.main.BottomNavFragmentDirections
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,6 +37,12 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
         adapter.setOnClickListener { review ->
             // TODO
         }
+        (requireActivity() as MainActivity?)?.apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.reviews.adapter = adapter
         binding.newReview.setOnClickListener {
             mainNavController.navigate(HookahDetailsFragmentDirections.toHookahReview(navArgs.hookah))
@@ -59,5 +64,5 @@ private fun Hookah.applyToView(binding: FragmentHookahDetailBinding) {
     binding.description.text = description
     binding.hookahPrice.text = binding.root.context.getString(R.string.price, price)
     binding.rating.text = binding.root.context.getString(R.string.rating, rating.average)
-    binding.toolbar.title = name
+    binding.title.text = name
 }

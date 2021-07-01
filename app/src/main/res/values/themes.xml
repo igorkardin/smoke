@@ -45,9 +45,4 @@
     <style name="App.TextAppearance.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
-
-    <style name="Theme.Smoke.CollapsingToolbarLayoutExpandedTextStyle" parent="">
-        <item name="android:textColor">@android:color/transparent</item>
-        <item name="android:textSize">0sp</item>
-    </style>
 </resources>
