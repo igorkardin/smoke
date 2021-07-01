@@ -13,7 +13,6 @@ import com.simbirsoft.smoke.ui.BaseFragment
 import com.simbirsoft.smoke.ui.main.BottomNavFragmentDirections
 import com.simbirsoft.smoke.ui.openMap
 import kotlinx.coroutines.flow.collectLatest
-import java.util.*
 import javax.inject.Inject
 
 

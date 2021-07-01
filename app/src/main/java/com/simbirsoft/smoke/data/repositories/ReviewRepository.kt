@@ -2,8 +2,14 @@ package com.simbirsoft.smoke.data.repositories
 
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.simbirsoft.smoke.data.*
-import com.simbirsoft.smoke.data.sources.*
+import com.simbirsoft.smoke.data.await
+import com.simbirsoft.smoke.data.getReferenceById
+import com.simbirsoft.smoke.data.sources.HOOKAH_COLLECTION
+import com.simbirsoft.smoke.data.sources.REVIEW_COLLECTION
+import com.simbirsoft.smoke.data.sources.ReviewPagingSource
+import com.simbirsoft.smoke.data.sources.updateRating
+import com.simbirsoft.smoke.data.toHookah
+import com.simbirsoft.smoke.data.toMap
 import com.simbirsoft.smoke.domain.AddRepository
 import com.simbirsoft.smoke.domain.IdSelectParams
 import com.simbirsoft.smoke.domain.Review
@@ -14,9 +20,7 @@ class ReviewRepository(private val store: FirebaseFirestore) :
     private val collectionReference: CollectionReference = store.collection(REVIEW_COLLECTION)
     private val hookahCollection: CollectionReference = store.collection(HOOKAH_COLLECTION)
 
-    override fun provideDataSource(params: IdSelectParams): FirebasePagingSource<Review> = ReviewPagingSource(
-        store, params.id
-    )
+    override fun provideDataSource(params: IdSelectParams) = ReviewPagingSource(store, params.id)
 
     override suspend fun add(t: Review) {
         val hookahReference = hookahCollection.getReferenceById(t.hookahId)

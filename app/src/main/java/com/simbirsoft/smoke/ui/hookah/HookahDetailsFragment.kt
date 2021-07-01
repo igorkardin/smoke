@@ -1,7 +1,6 @@
 package com.simbirsoft.smoke.ui.hookah
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -9,12 +8,12 @@ import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.simbirsoft.smoke.App
+import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.databinding.FragmentHookahDetailBinding
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
-import com.simbirsoft.smoke.ui.main.BottomNavFragmentDirections
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -51,6 +50,10 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
                 viewModel.getReviews(navArgs.hookah).collectLatest { adapter.submitData(it) }
             }
         }
+    }
+
+    fun resetFragment() {
+        (activity as? MainActivity)?.currentFragment = this
     }
 }
 

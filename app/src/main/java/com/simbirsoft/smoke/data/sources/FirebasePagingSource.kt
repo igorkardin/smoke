@@ -9,7 +9,6 @@ import com.simbirsoft.smoke.data.await
 import com.simbirsoft.smoke.domain.PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 const val EMPTY_FIREBASE_ID = "mt"
 

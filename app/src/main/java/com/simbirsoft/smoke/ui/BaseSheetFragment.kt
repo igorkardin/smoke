@@ -7,7 +7,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
-import com.simbirsoft.smoke.data.BackPressed
 
 abstract class BaseSheetFragment : BottomSheetDialogFragment(), BackPressed {
     val mainNavController get() = (requireActivity() as MainActivity).findNavController(R.id.main_container)

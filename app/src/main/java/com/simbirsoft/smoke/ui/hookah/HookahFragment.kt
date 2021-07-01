@@ -1,10 +1,11 @@
 package com.simbirsoft.smoke.ui.hookah
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.databinding.FragmentHookahBinding
@@ -20,29 +21,28 @@ class HookahFragment : BaseFragment(R.layout.fragment_hookah) {
     @Inject
     lateinit var viewModelFactory: HookahViewModel.Factory
 
-    private val binding by viewBinding<FragmentHookahBinding>()
+    private lateinit var binding: FragmentHookahBinding
     private val viewModel by viewModels<HookahViewModel> { viewModelFactory }
 
-    private val adapter = HookahAdapter()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentHookahBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun inject(app: App) = app.hookahComponent?.inject(this) ?: Unit
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.apply {
+        val hookahAdapter = HookahAdapter().apply {
             setOnClickListener {
                 mainNavController.navigate(BottomNavFragmentDirections.toHookahDetails(it))
             }
         }
-        binding.recycler.apply {
-            adapter = this@HookahFragment.adapter.withLoadStateFooter(
-                footer = BaseLoadStateAdapter { this@HookahFragment.adapter.retry() }
-            )
-        }
+        binding.recycler.adapter = hookahAdapter.withLoadStateFooter(
+            footer = BaseLoadStateAdapter { hookahAdapter.retry() }
+        )
         lifecycleScope.launchWhenStarted {
-            viewModel.hookahs.collectLatest {
-                adapter.submitData(it)
-            }
+            viewModel.hookahs.collectLatest { hookahAdapter.submitData(it) }
         }
     }
 }

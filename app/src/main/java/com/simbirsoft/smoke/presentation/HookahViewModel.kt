@@ -13,12 +13,17 @@ import com.simbirsoft.smoke.domain.PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 class HookahViewModel(private val repository: HookahRepository) : ViewModel() {
     val hookahs: Flow<PagingData<Hookah>> = Pager(
         config = PagingConfig(pageSize = PAGE_SIZE.toInt(), enablePlaceholders = true, maxSize = 100)
     ) { repository.provideDataSource() }
         .flow
+        .map {
+            println(it)
+            it
+        }
         .flowOn(Dispatchers.IO)
         .cachedIn(viewModelScope)
 
