@@ -28,11 +28,9 @@ class BaseLoadStateAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
-        val binding =
-            LoadStateViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = LoadStateViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LoadStateViewHolder(binding)
     }
 
-    class LoadStateViewHolder(val binding: LoadStateViewBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class LoadStateViewHolder(val binding: LoadStateViewBinding) : RecyclerView.ViewHolder(binding.root)
 }

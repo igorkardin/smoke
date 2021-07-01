@@ -15,13 +15,14 @@ import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
     private val binding by viewBinding<FragmentHookahDetailBinding>()
     private val viewModel by viewModels<ReviewViewModel> { viewModelFactory }
     private val navArgs by navArgs<HookahDetailsFragmentArgs>()
+
+    private lateinit var adapter: ReviewAdapter
 
     @Inject
     lateinit var viewModelFactory: ReviewViewModel.Factory
@@ -33,7 +34,7 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navArgs.hookah.applyToView(binding)
-        val adapter = ReviewAdapter()
+        adapter = ReviewAdapter()
         adapter.setOnClickListener { review ->
             // TODO
         }
@@ -48,18 +49,15 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
             mainNavController.navigate(HookahDetailsFragmentDirections.toHookahReview(navArgs.hookah))
         }
         lifecycleScope.launchWhenStarted {
-            viewModel.getReviews(navArgs.hookah).collectLatest { adapter.submitData(it) }
-        }
-        mainNavController.addOnDestinationChangedListener { _, _, _ ->
-            lifecycleScope.launch {
-                viewModel.reviews = null
-                viewModel.getReviews(navArgs.hookah).collectLatest { adapter.submitData(it) }
+            viewModel.getReviews(navArgs.hookah).collectLatest {
+                adapter.submitData(it)
             }
         }
     }
 
     fun resetFragment() {
         (activity as? MainActivity)?.currentFragment = this
+        viewModel.reload()
     }
 }
 

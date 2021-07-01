@@ -89,12 +89,10 @@ fun DocumentSnapshot.toVideo() = Video(
 )
 
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
-    addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            continuation.resumeWith(Result.success(task.result))
-        } else {
-            continuation.resumeWithException(task.exception ?: IllegalStateException("Missing exception"))
-        }
+    addOnSuccessListener { task ->
+        continuation.resumeWith(Result.success(task))
+    }.addOnFailureListener {
+        continuation.resumeWithException(exception ?: IllegalStateException("Missing exception"))
     }
 }
 
