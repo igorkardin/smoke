@@ -22,6 +22,7 @@ class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
             fixedRateTimer(initialDelay = 3000L, period = 10000L) {
                 launchActivity<MainActivity>()
                 this.cancel()
+                finish()
             }
         }
     }
