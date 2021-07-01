@@ -11,11 +11,7 @@ inline fun <reified T : Any> Context.launchActivity(
 
     val intent = newIntent<T>(this)
     intent.init()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(intent, options)
-    } else {
-        startActivity(intent)
-    }
+    startActivity(intent, options)
 }
 
 inline fun <reified T : Any> newIntent(context: Context): Intent =

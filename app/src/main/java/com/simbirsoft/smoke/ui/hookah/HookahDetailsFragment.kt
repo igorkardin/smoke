@@ -37,6 +37,12 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
         adapter.setOnClickListener { review ->
             // TODO
         }
+        (requireActivity() as MainActivity?)?.apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.reviews.adapter = adapter
         binding.newReview.setOnClickListener {
             mainNavController.navigate(HookahDetailsFragmentDirections.toHookahReview(navArgs.hookah))
@@ -62,5 +68,5 @@ private fun Hookah.applyToView(binding: FragmentHookahDetailBinding) {
     binding.description.text = description
     binding.hookahPrice.text = binding.root.context.getString(R.string.price, price)
     binding.rating.text = binding.root.context.getString(R.string.rating, rating.average)
-    binding.toolbar.title = name
+    binding.title.text = name
 }
