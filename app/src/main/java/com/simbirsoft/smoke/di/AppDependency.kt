@@ -3,6 +3,7 @@ package com.simbirsoft.smoke.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.Component
@@ -23,7 +24,11 @@ interface AppComponent {
 class AppModule(private val context: Context) {
     @Provides
     @Singleton
-    fun firestore() = Firebase.firestore
+    fun firestore() = Firebase.firestore.apply {
+        firestoreSettings = FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(false)
+            .build()
+    }
 
     @Provides
     @Singleton

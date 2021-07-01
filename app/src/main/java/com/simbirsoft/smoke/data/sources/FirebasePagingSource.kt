@@ -9,7 +9,6 @@ import com.simbirsoft.smoke.data.await
 import com.simbirsoft.smoke.domain.PAGE_SIZE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 const val EMPTY_FIREBASE_ID = "mt"
 
@@ -25,17 +24,19 @@ abstract class FirebasePagingSource<T : Any> : PagingSource<Query, T>() {
     protected open fun Query.applySelectOptions(): Query = this
 
     final override suspend fun load(params: LoadParams<Query>): LoadResult<Query, T> = withContext(Dispatchers.IO) {
-        val currentPage = params.key ?: collectionReference.pageAfter()
-        val currentPageQuerySnapshot = currentPage.get().await()
-        val lastSnapshot = if (currentPageQuerySnapshot?.isEmpty == false) {
-            currentPageQuerySnapshot.documents.last()
-        } else {
-            null
-        }
-        val data = currentPageQuerySnapshot?.map { snapshot -> mapper(snapshot) }
-        val nextPage = collectionReference.pageAfter(lastSnapshot)
-
         return@withContext try {
+            val currentPage = params.key ?: collectionReference.pageAfter()
+            val currentPageQuerySnapshot = currentPage.get().await()
+            val lastSnapshot = if (currentPageQuerySnapshot?.isEmpty == false) {
+                currentPageQuerySnapshot.documents.last()
+            } else {
+                null
+            }
+            val data = currentPageQuerySnapshot?.map { snapshot -> mapper(snapshot) }
+            val nextPage = collectionReference.pageAfter(lastSnapshot)
+            if (currentPageQuerySnapshot?.isEmpty == true && currentPageQuerySnapshot.metadata.isFromCache) {
+                throw IllegalStateException("BEBEBE")
+            }
             LoadResult.Page(
                 data = data!!,
                 prevKey = null,

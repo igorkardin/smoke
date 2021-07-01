@@ -12,7 +12,7 @@ data class Hookah(
     val description: String
 ) : DTO, Serializable
 
-data class HookahRating(val count: Long, val average: Double)
+data class HookahRating(val count: Long, val average: Double) : Serializable
 
 data class Review(
     override val id: String = EMPTY_FIREBASE_ID,
@@ -35,6 +35,14 @@ data class Discount(
     val shopId: String,
     val name: String,
     val description: String
+) : DTO, Serializable
+
+data class Video(
+    override val id: String,
+    val length: String,
+    val title: String,
+    val url: String,
+    val preview: String
 ) : DTO, Serializable
 
 interface DTO {

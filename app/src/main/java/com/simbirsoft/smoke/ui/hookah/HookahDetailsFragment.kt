@@ -1,20 +1,22 @@
 package com.simbirsoft.smoke.ui.hookah
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.simbirsoft.smoke.App
+import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
 import com.simbirsoft.smoke.databinding.FragmentHookahDetailBinding
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
-import com.simbirsoft.smoke.ui.main.BottomNavFragmentDirections
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,6 +25,8 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
     private val binding by viewBinding<FragmentHookahDetailBinding>()
     private val viewModel by viewModels<ReviewViewModel> { viewModelFactory }
     private val navArgs by navArgs<HookahDetailsFragmentArgs>()
+
+    private lateinit var adapter: ReviewAdapter
 
     @Inject
     lateinit var viewModelFactory: ReviewViewModel.Factory
@@ -34,23 +38,41 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navArgs.hookah.applyToView(binding)
-        val adapter = ReviewAdapter()
+        adapter = ReviewAdapter()
         adapter.setOnClickListener { review ->
             // TODO
         }
+        (requireActivity() as MainActivity?)?.apply {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.reviews.adapter = adapter
         binding.newReview.setOnClickListener {
             mainNavController.navigate(HookahDetailsFragmentDirections.toHookahReview(navArgs.hookah))
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.getReviews(navArgs.hookah).collectLatest { adapter.submitData(it) }
+        binding.errorState.retry.setOnClickListener {
+            adapter.retry()
         }
-        mainNavController.addOnDestinationChangedListener { _, _, _ ->
-            lifecycleScope.launch {
-                viewModel.reviews = null
-                viewModel.getReviews(navArgs.hookah).collectLatest { adapter.submitData(it) }
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collect {
+                binding.errorState.root.isVisible = it.refresh is LoadState.Error
+                if (it.append is LoadState.NotLoading && it.append.endOfPaginationReached) {
+                    binding.emptyState.isVisible = adapter.itemCount < 1
+                }
             }
         }
+        lifecycleScope.launchWhenStarted {
+            viewModel.getReviews(navArgs.hookah).collectLatest {
+                adapter.submitData(it)
+            }
+        }
+    }
+
+    fun resetFragment() {
+        (activity as? MainActivity)?.currentFragment = this
+        viewModel.reload()
     }
 }
 
@@ -59,5 +81,5 @@ private fun Hookah.applyToView(binding: FragmentHookahDetailBinding) {
     binding.description.text = description
     binding.hookahPrice.text = binding.root.context.getString(R.string.price, price)
     binding.rating.text = binding.root.context.getString(R.string.rating, rating.average)
-    binding.toolbar.title = name
+    binding.title.text = name
 }

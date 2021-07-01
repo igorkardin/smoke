@@ -7,31 +7,27 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.simbirsoft.smoke.data.repositories.HookahRepository
-import com.simbirsoft.smoke.domain.Hookah
+import com.simbirsoft.smoke.data.repositories.VideoRepository
 import com.simbirsoft.smoke.domain.PAGE_SIZE
+import com.simbirsoft.smoke.domain.Shop
+import com.simbirsoft.smoke.domain.Video
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 
-class HookahViewModel(private val repository: HookahRepository) : ViewModel() {
-    val hookahs: Flow<PagingData<Hookah>> = Pager(
+class VideoViewModel(private val repository: VideoRepository) : ViewModel() {
+    val videos: Flow<PagingData<Video>> = Pager(
         config = PagingConfig(pageSize = PAGE_SIZE.toInt(), enablePlaceholders = true, maxSize = 100)
     ) { repository.provideDataSource() }
         .flow
-        .map {
-            println(it)
-            it
-        }
         .flowOn(Dispatchers.IO)
         .cachedIn(viewModelScope)
 
-    class Factory(private val repository: HookahRepository) : ViewModelProvider.Factory {
+    class Factory(private val repository: VideoRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(HookahViewModel::class.java)) {
-                return HookahViewModel(repository) as T
+            if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
+                return VideoViewModel(repository) as T
             } else throw IllegalStateException("Bad ViewModel")
         }
     }

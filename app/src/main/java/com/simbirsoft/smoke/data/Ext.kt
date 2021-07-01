@@ -72,13 +72,27 @@ fun DocumentSnapshot.toDiscount() = Discount(
     description = getString("description")!!
 )
 
+fun Video.toMap() = mapOf(
+    "id" to id,
+    "title" to title,
+    "url" to url,
+    "length" to length,
+    "preview" to preview
+)
+
+fun DocumentSnapshot.toVideo() = Video(
+    id = getString("id")!!,
+    title = getString("title")!!,
+    url = getString("url")!!,
+    length = getString("length")!!,
+    preview = getString("preview")!!
+)
+
 suspend fun <T> Task<T>.await() = suspendCoroutine<T?> { continuation ->
-    addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            continuation.resumeWith(Result.success(task.result))
-        } else {
-            continuation.resumeWithException(task.exception ?: IllegalStateException("Missing exception"))
-        }
+    addOnSuccessListener { task ->
+        continuation.resumeWith(Result.success(task))
+    }.addOnFailureListener {
+        continuation.resumeWithException(exception ?: IllegalStateException("Missing exception"))
     }
 }
 

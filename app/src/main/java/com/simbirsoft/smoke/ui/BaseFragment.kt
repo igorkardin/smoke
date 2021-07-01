@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.MainActivity
 import com.simbirsoft.smoke.R
-import com.simbirsoft.smoke.data.BackPressed
 
 abstract class BaseFragment(@LayoutRes id: Int) : Fragment(id), BackPressed {
     val mainNavController get() = (requireActivity() as MainActivity).findNavController(R.id.main_container)

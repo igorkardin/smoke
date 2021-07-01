@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.simbirsoft.smoke.App
 import com.simbirsoft.smoke.databinding.FragmentRatingBinding
 import com.simbirsoft.smoke.domain.Review
 import com.simbirsoft.smoke.presentation.ReviewViewModel
-import com.simbirsoft.smoke.ui.video.BaseSheetFragment
+import com.simbirsoft.smoke.ui.BaseSheetFragment
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,6 +46,13 @@ class HookahReviewFragment : BaseSheetFragment() {
             dismiss()
         }
         binding.buttonCancel.setOnClickListener { dismiss() }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        ((parentFragment as? NavHostFragment)?.childFragmentManager?.fragments?.get(0) as? HookahDetailsFragment)?.apply {
+            resetFragment()
+        }
     }
 
     private fun addReview() {

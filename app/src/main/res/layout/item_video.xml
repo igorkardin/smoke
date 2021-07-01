@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/video_image"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
