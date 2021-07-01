@@ -2,9 +2,11 @@ package com.simbirsoft.smoke.ui.hookah
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.simbirsoft.smoke.App
@@ -14,7 +16,9 @@ import com.simbirsoft.smoke.databinding.FragmentHookahDetailBinding
 import com.simbirsoft.smoke.domain.Hookah
 import com.simbirsoft.smoke.presentation.ReviewViewModel
 import com.simbirsoft.smoke.ui.BaseFragment
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
@@ -47,6 +51,17 @@ class HookahDetailsFragment : BaseFragment(R.layout.fragment_hookah_detail) {
         binding.reviews.adapter = adapter
         binding.newReview.setOnClickListener {
             mainNavController.navigate(HookahDetailsFragmentDirections.toHookahReview(navArgs.hookah))
+        }
+        binding.errorState.retry.setOnClickListener {
+            adapter.retry()
+        }
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collect {
+                binding.errorState.root.isVisible = it.refresh is LoadState.Error
+                if (it.append is LoadState.NotLoading && it.append.endOfPaginationReached) {
+                    binding.emptyState.isVisible = adapter.itemCount < 1
+                }
+            }
         }
         lifecycleScope.launchWhenStarted {
             viewModel.getReviews(navArgs.hookah).collectLatest {

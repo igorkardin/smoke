@@ -21,4 +21,7 @@
     <string name="button_cancel">Отмена</string>
     <string name="button_send">Отправить</string>
     <string name="button_shop_map">Открыть на карте</string>
+    <string name="text_list_empty">Список пуст</string>
+    <string name="text_error_load">Не удалось загрузить</string>
+    <string name="text_retry">Обновить</string>
 </resources>
